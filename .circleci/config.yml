@@ -56,7 +56,7 @@ jobs:
           environment:
             PROJECT_DIR: /var/www/todoapp
           command: |
-            scp -o "StrictHostKeyChecking no" -r /tmp/dist/* ${SERVER_USERNAME}@${SERVER_ADDRESS}:${PROJECT_DIR}/ui/
+            scp -o "StrictHostKeyChecking no" -r /tmp/dist ${SERVER_USERNAME}@${SERVER_ADDRESS}:${PROJECT_DIR}/ui
 
 workflows:
   version: 2

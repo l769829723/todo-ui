@@ -1,6 +1,6 @@
 <template>
   <div>
-    <mu-appbar style="width: 100%;position: fixed;z-index: 1;" color="primary" v-if="$store.state.signIn">
+    <mu-appbar style="width: 100%;position: fixed;z-index: 2;" color="primary" v-if="$store.state.signIn">
       TODOS
       <mu-button flat slot="right" :to="{name: 'todos'}">Home</mu-button>
       <mu-menu slot="right" open-on-hover>
@@ -103,7 +103,7 @@ body,html {
 }
 
 .loadingBar {
-  z-index: 1;
+  z-index: 3;
   position: fixed;
   top: 0;
 }

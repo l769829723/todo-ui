@@ -57,7 +57,7 @@ jobs:
             PROJECT_DIR: /var/www/todoapp
           command: |
             scp -o "StrictHostKeyChecking no" -r /tmp/dist/* ${SERVER_USERNAME}@${SERVER_ADDRESS}:${PROJECT_DIR}/ui/
-            # ssh -o "StrictHostKeyChecking no" ${SERVER_USERNAME}@${SERVER_ADDRESS} "mv -f ${PROJECT_DIR}/dist ${PROJECT_DIR}/ui"
+            ssh -o "StrictHostKeyChecking no" ${SERVER_USERNAME}@${SERVER_ADDRESS} "systemctl restart nginx""
 
 workflows:
   version: 2

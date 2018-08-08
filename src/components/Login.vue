@@ -44,6 +44,7 @@ export default {
   },
   methods: {
     submit () {
+      console.log(EndpointAuth)
       this.$refs.form.validate().then((result) => {
         if (!result) { return false }
         this.$http.post(EndpointAuth + '/', JSON.stringify(this.validateForm), HTTPCONFIG).then(response => {

@@ -65,7 +65,7 @@ const actions = {
   }
 }
 
-const EndpointRoot = 'http://' + window.location.hostname + ':5000/api/v1'
+const EndpointRoot = 'http://' + window.location.hostname + ':' + (process.env.NODE_ENV === 'production' ? '8000' : '5000') + '/api/v1'
 
 const URI = EndpointRoot + '/todos'
 

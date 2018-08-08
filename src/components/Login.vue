@@ -44,17 +44,16 @@ export default {
   },
   methods: {
     submit () {
-      console.log(EndpointAuth)
       this.$refs.form.validate().then((result) => {
         if (!result) { return false }
         this.$http.post(EndpointAuth + '/', JSON.stringify(this.validateForm), HTTPCONFIG).then(response => {
           var token = response.body.token
-          this.$store.dispatch('successNotify', 'Congratulations, You are login successful.')
+          this.$toast.success('Congratulations, You are login successful.')
           this.$store.commit('isLogin', token)
           this.$router.push({ name: 'todos' })
         }, response => {
           var errorMessage = response.body ? response.body.message : 'error'
-          this.$store.dispatch('alertNotify', errorMessage)
+          this.$toast.error(errorMessage)
         })
       })
     },

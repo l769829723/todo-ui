@@ -8,6 +8,8 @@ import 'muse-ui/dist/muse-ui.css'
 import VueResource from 'vue-resource'
 import VueTimeago from 'vue-timeago'
 import VueCookies from 'vue-cookies'
+import NProgress from 'muse-ui-progress'
+import Toast from 'muse-ui-toast'
 
 import store from '@/global.js'
 
@@ -17,18 +19,40 @@ Vue.use(MuseUI)
 Vue.use(VueResource)
 Vue.use(VueTimeago)
 Vue.use(VueCookies)
+Vue.use(Toast, {
+  position: 'bottom',
+  time: 3000,
+  closeIcon: 'close',
+  close: true,
+  successIcon: 'check_circle',
+  infoIcon: 'info',
+  warningIcon: 'priority_high',
+  errorIcon: 'warning'
+})
+Vue.use(NProgress, {
+  zIndex: 2,
+  top: 0,
+  color: 'secondary',
+  className: 'loadingBar'
+})
 
 Vue.http.interceptors.push(function (request) {
+  // show loading bar
+  this.$progress.start()
   // modify headers
   if (this.$cookies.get('session')) {
     request.headers.set('X-APP-TOKEN', 'Token ' + this.$cookies.get('session'))
   }
   // return response callback
   return function (response) {
-    if (response.status === 401) {
-      this.$store.commit('logOut')
-      this.$router.push({name: 'login'})
-      this.$store.dispatch('alertNotify', 'Your session has timed out, please re-login.')
+    // close loading bar
+    this.$progress.done()
+    if (this.$router.history.current.name !== 'login') {
+      if (response.status === 401) {
+        this.$store.commit('logOut')
+        this.$router.push({ name: 'login' })
+        this.$toast.info('Your session has timed out, please re-login.')
+      }
     }
   }
 })
@@ -58,6 +82,14 @@ new Vue({
   el: '#app',
   router,
   store,
-  components: { App },
-  template: '<App/>'
+  components: {
+    App
+  },
+  template: '<App/>',
+  created () {
+    this.$progress.start()
+  },
+  mounted () {
+    this.$progress.done()
+  }
 })

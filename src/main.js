@@ -47,6 +47,9 @@ Vue.http.interceptors.push(function (request) {
   return function (response) {
     // close loading bar
     this.$progress.done()
+    if (response.status === 500) {
+      this.$toast.info('Oops, got an unknown problem, please retry!')
+    }
     if (this.$router.history.current.name !== 'login') {
       if (response.status === 401) {
         this.$store.commit('logOut')

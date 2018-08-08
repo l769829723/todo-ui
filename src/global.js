@@ -28,40 +28,6 @@ const mutations = {
   },
   setUserInfo (state, user) {
     this.user = user
-  },
-  toogleNotify (state, toogle) {
-    state.showNotify = toogle
-  },
-  updateNotify (state, content) {
-    state.notify = content
-  }
-}
-
-const actions = {
-  closeNotify (context) {
-    setTimeout(() => {
-      context.commit('toogleNotify', false)
-    }, 3000)
-  },
-  alertNotify (context, msg) {
-    var content = {
-      color: 'red',
-      icon: 'clear',
-      message: msg
-    }
-    context.commit('updateNotify', content)
-    context.commit('toogleNotify', true)
-    context.dispatch('closeNotify')
-  },
-  successNotify (context, msg) {
-    var content = {
-      color: 'green',
-      icon: 'check',
-      message: msg
-    }
-    context.commit('updateNotify', content)
-    context.commit('toogleNotify', true)
-    context.dispatch('closeNotify')
   }
 }
 
@@ -78,8 +44,7 @@ const HTTPCONFIG = {
 
 export default new Vuex.Store({
   state,
-  mutations,
-  actions
+  mutations
 })
 
 export {

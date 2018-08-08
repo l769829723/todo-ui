@@ -155,17 +155,20 @@ export default {
       this.$refs.profile.clear()
     },
     updateProfiel () {
-      var info = {
-        username: this.profileForm.username,
-        old_password: this.identityForm.password,
-        new_password: this.profileForm.password
-      }
-      this.$http.post(EndpointAuth + '/me/', JSON.stringify(info), HTTPCONFIG).then(response => {
-        this.$store.commit('logOut')
-        this.$router.push({ name: 'login' })
-        this.$store.dispatch('successNotify', 'Your password already updated, please re-login.')
-      }, response => {
-        this.$store.dispatch('alertNotify', 'Error, please check your profile info.')
+      this.$refs.profile.validate().then((result) => {
+        if (!result) { return false }
+        var info = {
+          username: this.profileForm.username,
+          old_password: this.identityForm.password,
+          new_password: this.profileForm.password
+        }
+        this.$http.post(EndpointAuth + '/me/', JSON.stringify(info), HTTPCONFIG).then(response => {
+          this.$store.commit('logOut')
+          this.$router.push({ name: 'login' })
+          this.$toast.success('Your password already updated, please re-login.')
+        }, response => {
+          this.$toast.error('Error, please check your profile info.')
+        })
       })
     }
   }

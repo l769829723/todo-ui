@@ -63,12 +63,6 @@
         <mu-circular-progress :size="48"></mu-circular-progress>
       </div>
     </div>
-
-    <mu-snackbar :color="notify.color" :open.sync="notify.open">
-      <mu-icon left value="notifications_none"></mu-icon>
-      {{notify.message}}
-      <mu-button flat slot="action" color="#fff" @click="$emit('click-notify')">{{ notify.button }}</mu-button>
-    </mu-snackbar>
     <mu-dialog :title="alert.title" width="600" max-width="80%" :esc-press-close="false" :overlay-close="false" :open.sync="alert.open">
         {{ alert.content }}
       <mu-button slot="actions" flat color="secondary" @click="$emit('confirm-delete')">Yes</mu-button>
@@ -96,14 +90,6 @@ export default {
       showAlert: false,
       showList: false,
       todoList: [],
-      notify: {
-        color: 'success',
-        open: false,
-        message: '',
-        timeout: 3000,
-        position: 'bottom',
-        button: 'CLOSE'
-      },
       alert: {
         open: false,
         title: 'Are you sure?',
@@ -156,22 +142,22 @@ export default {
       if (!todo.is_done) {
         todo.is_done = true
         this.$http.put(URI + '/' + todo.id.toString() + '/', JSON.stringify(todo), HTTPCONFIG).then(response => {
-          this.showSuccessNotify('The todo has updated, the list will be updated later.')
+          this.$toast.success('The todo has updated, the list will be updated later.')
         }, response => {
-          this.showErrorNotify('Update failed, please retry later.')
+          this.$toast.error('Update failed, please retry later.')
         })
       } else {
-        this.showSuccessNotify('The todo has updated, the list will be updated later.')
+        this.$toast.success('The todo has updated, the list will be updated later.')
       }
     },
     saveToDo (todo) {
       this.openWriteDialog = false
       this.$http.post(URI + '/', JSON.stringify({'name': todo.name, 'is_done': todo.isDone, 'is_important': todo.isImportant}), HTTPCONFIG).then(response => {
         this.todoList.unshift(response.body)
-        this.showSuccessNotify('The todo has added, the list will be updated later.')
+        this.$toast.success('The todo has updated, the list will be updated later.')
         this.sortedTodoList()
       }, response => {
-        this.showErrorNotify('Added failed, please retry later.')
+        this.$toast.error('Added failed, please retry later.')
       })
     },
     removeTodo (todoId) {
@@ -182,12 +168,12 @@ export default {
         this.$http.delete(URI + '/' + this.alert.id + '/', HTTPCONFIG).then(response => {
           if (response.ok) {
             this.todoList = this.todoList.filter(todo => todo.id !== this.alert.id)
-            this.showSuccessNotify('This todo has been deleted.')
+            this.$toast.success('This todo has been deleted.')
             this.$off('confirm-delete')
             this.sortedTodoList()
           }
         }, response => {
-          this.showErrorNotify('Delete failed, please try again.')
+          this.$toast.error('Delete failed, please try again.')
         })
       })
     },
@@ -197,42 +183,15 @@ export default {
     getTodoList () {
       this.$http.get(URI + '/' + '?page=' + this.page.current, HTTPCONFIG).then(response => {
         this.showList = true
-        this.notify.open = false
         this.todoList = response.body.todos
         this.tempTodoList = response.body.todos
         this.page = response.body.page
         this.sortedTodoList()
       }, response => {
         if (response.status === 0) {
-          this.showErrorNotify('Connection timeout, please retry.')
+          this.$toast.error('Connection timeout, please retry.')
         }
       })
-    },
-    showErrorNotify (msg) {
-      this.$on('click-notify', function () {
-        this.notify.open = false
-        this.getTodoList()
-      })
-      this.notify.button = 'RETRY'
-      this.notify.color = 'error'
-      this.notify.message = msg
-      this.openNotify()
-    },
-    showSuccessNotify (msg) {
-      this.$on('click-notify', function () {
-        this.notify.open = false
-      })
-      this.notify.button = 'CLOSE'
-      this.notify.color = 'success'
-      this.notify.message = msg
-      this.openNotify()
-    },
-    openNotify () {
-      if (this.notify.timer) clearTimeout(this.notify.timer)
-      this.notify.open = true
-      this.notify.timer = setTimeout(() => {
-        this.notify.open = false
-      }, this.notify.timeout)
     }
   }
 }

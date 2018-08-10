@@ -101,10 +101,4 @@ body,html {
   -moz-osx-font-smoothing: grayscale;
   height: 100%;
 }
-
-.loadingBar {
-  z-index: 3;
-  position: fixed;
-  top: 0;
-}
 </style>

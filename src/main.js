@@ -13,6 +13,8 @@ import Toast from 'muse-ui-toast'
 
 import store from '@/global.js'
 
+import '@/assets/main.css'
+
 Vue.config.productionTip = false
 
 Vue.use(MuseUI)

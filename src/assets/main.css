@@ -1,0 +1,5 @@
+.loadingBar {
+  position: fixed;
+  z-index: 3;
+  top: 0;
+}

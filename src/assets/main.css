@@ -1,5 +1,27 @@
+body, html {
+  width: 100%;
+  height: 100%;
+}
+
+::selection {
+  background: #2196f3;
+  color: white;
+}
+
+::-moz-selection {
+  background: #2196f3;
+  color: white;
+}
+
+::-webkit-selection {
+  background: #2196f3;
+  color: white;
+}
+
 .loadingBar {
   position: fixed;
   z-index: 3;
   top: 0;
 }
+
+

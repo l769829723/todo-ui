@@ -51,7 +51,6 @@
 </template>
 
 <script>
-import { EndpointAuth, HTTPCONFIG } from '@/global.js'
 export default {
   name: 'App',
   data () {
@@ -74,7 +73,7 @@ export default {
     },
     getUserInfo () {
       if (this.$store.state.signIn) {
-        this.$http.get(EndpointAuth + '/me/', HTTPCONFIG).then(response => {
+        this.$http.get('login/me/').then(response => {
           this.user = response.body
           this.user.picture = ''
         })
@@ -91,10 +90,6 @@ export default {
   z-index: -1;
   position: absolute;
 } */
-
-body,html {
-  height: 100%;
-}
 
 #app {
   -webkit-font-smoothing: antialiased;

@@ -31,24 +31,7 @@ const mutations = {
   }
 }
 
-const EndpointRoot = 'http://' + window.location.hostname + ':' + (process.env.NODE_ENV === 'production' ? '8000' : '5000') + '/api/v1'
-
-const URI = EndpointRoot + '/todos'
-
-const EndpointAuth = EndpointRoot + '/login'
-
-const HTTPCONFIG = {
-  timeout: 3000,
-  responseType: 'json'
-}
-
 export default new Vuex.Store({
   state,
   mutations
 })
-
-export {
-  URI,
-  HTTPCONFIG,
-  EndpointAuth
-}

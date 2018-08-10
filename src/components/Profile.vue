@@ -92,7 +92,6 @@
 </template>
 
 <script>
-import { EndpointAuth, HTTPCONFIG } from '@/global.js'
 export default {
   data () {
     return {
@@ -136,14 +135,14 @@ export default {
     checkIdentity () {
       this.$refs.identity.validate().then((ret) => {
         if (!ret) { return false }
-        this.$http.post(EndpointAuth + '/', JSON.stringify(this.identityForm), HTTPCONFIG).then(response => {
+        this.$http.post('login/', JSON.stringify(this.identityForm)).then(response => {
           this.stepCount += 1
           this.identityPass = true
         })
       })
     },
     getUserInfo () {
-      this.$http.get(EndpointAuth + '/me/', HTTPCONFIG).then(response => {
+      this.$http.get('login/me/').then(response => {
         this.user = response.body
       })
     },
@@ -162,7 +161,7 @@ export default {
           old_password: this.identityForm.password,
           new_password: this.profileForm.password
         }
-        this.$http.post(EndpointAuth + '/me/', JSON.stringify(info), HTTPCONFIG).then(response => {
+        this.$http.post('login/me/', JSON.stringify(info)).then(response => {
           this.$store.commit('logOut')
           this.$router.push({ name: 'login' })
           this.$toast.success('Your password already updated, please re-login.')

@@ -76,7 +76,6 @@
 </template>
 
 <script>
-import { URI, HTTPCONFIG } from '@/global.js'
 import ToDoItem from '@/components/ToDoItem'
 import WriteToDo from '@/components/WriteToDo'
 export default {
@@ -133,7 +132,7 @@ export default {
     },
     importantTodo (todo) {
       todo.is_important = !todo.is_important
-      this.$http.put(URI + '/' + todo.id.toString() + '/', JSON.stringify(todo), HTTPCONFIG).then(response => {
+      this.$http.put('todos/' + todo.id.toString() + '/', JSON.stringify(todo)).then(response => {
         this.todoList = this.todoList.sort((a, b) => a.is_important === true || b.is_important === true)
         this.sortedTodoList()
       })
@@ -141,7 +140,7 @@ export default {
     doneTodo (todo) {
       if (!todo.is_done) {
         todo.is_done = true
-        this.$http.put(URI + '/' + todo.id.toString() + '/', JSON.stringify(todo), HTTPCONFIG).then(response => {
+        this.$http.put('todos/' + todo.id.toString() + '/', JSON.stringify(todo)).then(response => {
           this.$toast.success('The todo has updated, the list will be updated later.')
         }, response => {
           this.$toast.error('Update failed, please retry later.')
@@ -152,7 +151,7 @@ export default {
     },
     saveToDo (todo) {
       this.openWriteDialog = false
-      this.$http.post(URI + '/', JSON.stringify({'name': todo.name, 'is_done': todo.isDone, 'is_important': todo.isImportant}), HTTPCONFIG).then(response => {
+      this.$http.post('todos/', JSON.stringify({'name': todo.name, 'is_done': todo.isDone, 'is_important': todo.isImportant})).then(response => {
         this.todoList.unshift(response.body)
         this.$toast.success('The todo has updated, the list will be updated later.')
         this.sortedTodoList()
@@ -165,7 +164,7 @@ export default {
       this.alert.id = todoId
       this.$on('confirm-delete', function () {
         this.alert.open = false
-        this.$http.delete(URI + '/' + this.alert.id + '/', HTTPCONFIG).then(response => {
+        this.$http.delete('todos/' + this.alert.id + '/').then(response => {
           if (response.ok) {
             this.todoList = this.todoList.filter(todo => todo.id !== this.alert.id)
             this.$toast.success('This todo has been deleted.')
@@ -181,7 +180,7 @@ export default {
       this.panel = todoId.toString() === this.panel ? '' : todoId.toString()
     },
     getTodoList () {
-      this.$http.get(URI + '/' + '?page=' + this.page.current, HTTPCONFIG).then(response => {
+      this.$http.get('todos/' + '?page=' + this.page.current).then(response => {
         this.showList = true
         this.todoList = response.body.todos
         this.tempTodoList = response.body.todos

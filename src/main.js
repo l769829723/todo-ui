@@ -18,7 +18,10 @@ import '@/assets/main.css'
 Vue.config.productionTip = false
 
 Vue.use(MuseUI)
-Vue.use(VueResource)
+Vue.use(VueResource, {
+  timeout: 60,
+  responseType: 'json'
+})
 Vue.use(VueTimeago)
 Vue.use(VueCookies)
 Vue.use(Toast, {
@@ -37,6 +40,8 @@ Vue.use(NProgress, {
   color: 'secondary',
   className: 'loadingBar'
 })
+
+Vue.http.options.root = 'http://' + window.location.hostname + ':' + (process.env.NODE_ENV === 'production' ? '8000' : '5000') + '/api/v1'
 
 Vue.http.interceptors.push(function (request) {
   // show loading bar
@@ -91,7 +96,7 @@ new Vue({
     App
   },
   template: '<App/>',
-  created () {
+  beforeCreated () {
     this.$progress.start()
   },
   mounted () {

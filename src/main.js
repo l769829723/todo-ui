@@ -4,7 +4,6 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 import MuseUI from 'muse-ui'
-import 'muse-ui/dist/muse-ui.css'
 import VueResource from 'vue-resource'
 import VueTimeago from 'vue-timeago'
 import VueCookies from 'vue-cookies'
@@ -13,6 +12,7 @@ import Toast from 'muse-ui-toast'
 
 import store from '@/global.js'
 
+import 'muse-ui/dist/muse-ui.css'
 import '@/assets/main.css'
 
 Vue.config.productionTip = false
@@ -41,7 +41,7 @@ Vue.use(NProgress, {
   className: 'loadingBar'
 })
 
-Vue.http.options.root = 'http://' + window.location.hostname + ':' + (process.env.NODE_ENV === 'production' ? '8000' : '5000') + '/api/v1'
+Vue.http.options.root = (process.env.NODE_ENV === 'production' ? 'https://' : 'http://') + window.location.hostname + ':' + (process.env.NODE_ENV === 'production' ? '8000' : '5000') + '/api/v1'
 
 Vue.http.interceptors.push(function (request) {
   // show loading bar

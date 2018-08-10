@@ -41,7 +41,7 @@ Vue.use(NProgress, {
   className: 'loadingBar'
 })
 
-Vue.http.options.root = (process.env.NODE_ENV === 'production' ? 'https://' : 'http://') + window.location.hostname + ':' + (process.env.NODE_ENV === 'production' ? '8000' : '5000') + '/api/v1'
+Vue.http.options.root = (process.env.NODE_ENV === 'production' ? 'http://' : 'http://') + window.location.hostname + ':' + (process.env.NODE_ENV === 'production' ? '8000' : '5000') + '/api/v1'
 
 Vue.http.interceptors.push(function (request) {
   // show loading bar

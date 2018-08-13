@@ -3,6 +3,7 @@
     <mu-appbar style="width: 100%;position: fixed;z-index: 2;" color="primary" v-if="$store.state.signIn">
       TODOS
       <mu-button flat slot="right" :to="{name: 'todos'}">Home</mu-button>
+      <mu-button flat slot="right" :to="{name: 'channels'}">Channels</mu-button>
       <mu-menu slot="right" open-on-hover>
         <mu-button flat>Welcome, {{ user.username }}.</mu-button>
       </mu-menu>

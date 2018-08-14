@@ -4,6 +4,7 @@
       TODOS
       <mu-button flat slot="right" :to="{name: 'todos'}">Home</mu-button>
       <mu-button flat slot="right" :to="{name: 'channels'}">Channels</mu-button>
+      <mu-button flat slot="right" href="http://localhost:5000/" target="_blank">Go Site</mu-button>
       <mu-menu slot="right" open-on-hover>
         <mu-button flat>Welcome, {{ user.username }}.</mu-button>
       </mu-menu>

@@ -9,8 +9,8 @@
     <div class="blank">
       <mu-card>
       <mu-card-text>
-        <mu-flex class="flex-wrapper" justify-content="start">
-          <mu-flex class="flex-demo" justify-content="center" fill>
+        <mu-flex justify-content="start">
+          <mu-flex justify-content="center" fill>
             <mu-text-field
               autofocus
               full-width

@@ -3,21 +3,27 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
+import Vuetify from 'vuetify'
 import MuseUI from 'muse-ui'
 import VueResource from 'vue-resource'
 import VueTimeago from 'vue-timeago'
 import VueCookies from 'vue-cookies'
 import NProgress from 'muse-ui-progress'
 import Toast from 'muse-ui-toast'
+import Message from 'muse-ui-message'
 
 import store from '@/global.js'
 
+import 'vuetify/dist/vuetify.min.css'
+import 'material-design-icons-iconfont/dist/material-design-icons.css'
 import 'muse-ui/dist/muse-ui.css'
 import '@/assets/main.css'
 
 Vue.config.productionTip = false
 
+Vue.use(Vuetify)
 Vue.use(MuseUI)
+Vue.use(Message)
 Vue.use(VueResource, {
   timeout: 60,
   responseType: 'json'

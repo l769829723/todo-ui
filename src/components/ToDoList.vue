@@ -16,8 +16,8 @@
     v-model="active"
     light
     right
-    slider-color="grey"
-  >
+    @input="updateTabAndPageBar"
+    slider-color="grey">
     <v-tab ripple>
       Opened
     </v-tab>
@@ -28,7 +28,7 @@
             <v-list two-line>
               <template v-for="(todo, index) in openedTodoList">
                 <v-list-tile
-                  :key="todo.name"
+                  :key="todo.pusblish_time"
                   avatar>
                   <v-tooltip bottom>
                     <v-btn
@@ -84,7 +84,7 @@
             <v-list two-line>
               <template v-for="(todo, index) in finishedTodoList">
                 <v-list-tile
-                  :key="todo.name"
+                  :key="todo.publish_time"
                   avatar>
                   <v-tooltip bottom>
                     <v-btn
@@ -156,7 +156,24 @@
       </v-card>
     </v-tab-item>
   </v-tabs>
+
+  <template v-if="pageBar">
+    <v-card flat>
+      <v-card-text>
+        <div class="text-xs-center">
+          <v-pagination
+            v-model="page.current"
+            :length="Math.ceil(page.total / page.per)"
+            total-visible="6"
+            @input.stop.native="updatePage"
+          ></v-pagination>
+        </div>
+      </v-card-text>
+    </v-card>
+  </template>
+
 </v-flex>
+
 </template>
 
 <script>
@@ -164,7 +181,8 @@ export default {
   name: 'ToDoList',
   data () {
     return {
-      active: 'Finished',
+      pageBar: false,
+      active: 0,
       todoList: [],
       todoForm: {
         valid: true,
@@ -177,9 +195,16 @@ export default {
       ],
       alert: false,
       page: {
-        current: 1
+        total: 120,
+        current: 1,
+        per: 16
       },
       pendingDelete: []
+    }
+  },
+  watch: {
+    'page.current' () {
+      this.getTodoList()
     }
   },
   created () {
@@ -251,11 +276,27 @@ export default {
     getTodoList () {
       this.$http.get('todos/' + '?page=' + this.page.current).then(response => {
         this.todoList = response.body.todos
+        this.page = response.body.page
       }, response => {
         if (response.status === 0) {
           this.$toast.error('Connection timeout, please retry.')
         }
       })
+    },
+    updateTabAndPageBar () {
+      switch (this.active) {
+        case 0:
+          this.pageBar = true
+          break
+        case 1:
+          this.pageBar = true
+          break
+        case 2:
+          this.pageBar = false
+          break
+        default:
+          this.pageBar = false
+      }
     }
   }
 }

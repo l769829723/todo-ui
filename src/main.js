@@ -58,6 +58,10 @@ Vue.http.interceptors.push(function (request) {
   }
   // return response callback
   return function (response) {
+    if (!response.ok) {
+      // Request failed
+      console.clear()
+    }
     // close loading bar
     this.$progress.done()
     if (response.status === 500) {

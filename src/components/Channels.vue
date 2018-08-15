@@ -3,11 +3,26 @@
     <mu-container>
       <mu-card>
         <mu-card-text>
-          <mu-flex justify-content="start">
-            <mu-flex justify-content="center" fill>
+          <mu-row>
+            <mu-col sm="12" xs="12">
               <mu-form ref="searchForm" :model="search">
                 <mu-form-item label="SEARCH" help-text="Enter text to search." prop="username">
-                  <mu-text-field v-model="search.value" prop="username" full-width></mu-text-field>
+                  <mu-text-field v-model="search.value" prop="username"></mu-text-field>
+                </mu-form-item>
+              </mu-form>
+            </mu-col>
+            <mu-col sm="12" xs="12">
+              <mu-button color="red" :disabled="cannotDelete" @click="confirmDelete">
+                DELETE
+                <mu-icon right value="delete"></mu-icon>
+              </mu-button>
+            </mu-col>
+          </mu-row>
+          <!-- <mu-flex class="flex-wrapper" align-items="start">
+            <mu-flex class="flex-demo" justify-content="center" fill>
+              <mu-form ref="searchForm" :model="search">
+                <mu-form-item label="SEARCH" help-text="Enter text to search." prop="username">
+                  <mu-text-field v-model="search.value" prop="username"></mu-text-field>
                 </mu-form-item>
               </mu-form>
             </mu-flex>
@@ -19,7 +34,7 @@
                 <mu-icon right value="delete"></mu-icon>
               </mu-button>
             </mu-flex>
-          </mu-flex>
+          </mu-flex> -->
         </mu-card-text>
       </mu-card>
     </mu-container>

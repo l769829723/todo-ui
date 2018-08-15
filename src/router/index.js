@@ -4,6 +4,7 @@ import ToDoList from '@/components/ToDoList'
 import Login from '@/components/Login'
 import Profile from '@/components/Profile'
 import Channels from '@/components/Channels'
+import Posts from '@/components/Posts'
 
 Vue.use(Router)
 
@@ -21,6 +22,14 @@ export default new Router({
       path: '/channels',
       name: 'channels',
       component: Channels,
+      meta: {
+        protected: true
+      }
+    },
+    {
+      path: '/posts',
+      name: 'posts',
+      component: Posts,
       meta: {
         protected: true
       }

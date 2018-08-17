@@ -16,7 +16,6 @@
     v-model="active"
     light
     right
-    @input="updateTabAndPageBar"
     slider-color="grey">
     <v-tab ripple>
       Opened
@@ -141,6 +140,8 @@
               v-model="todoForm.is_important"
             ></v-switch>
             <v-textarea
+              auto-grow
+              clearable
               autofocus
               :rules="todoFormRules"
               label="Write a new todo content"
@@ -149,7 +150,7 @@
             <v-card-actions>
               <v-spacer></v-spacer>
               <v-btn flat @click="clearForm">Clear</v-btn>
-              <v-btn color="primary" @click="saveForm">Save</v-btn>
+              <v-btn color="primary" @click.stop="saveForm">Save</v-btn>
             </v-card-actions>
           </v-form>
         </v-card-text>
@@ -157,7 +158,7 @@
     </v-tab-item>
   </v-tabs>
 
-  <template v-if="pageBar">
+  <template v-if="active < 2 && (page.total > page.per)">
     <v-card flat>
       <v-card-text>
         <div class="text-xs-center">
@@ -165,7 +166,6 @@
             v-model="page.current"
             :length="Math.ceil(page.total / page.per)"
             total-visible="6"
-            @input.stop.native="updatePage"
           ></v-pagination>
         </div>
       </v-card-text>
@@ -191,7 +191,8 @@ export default {
         is_important: false
       },
       todoFormRules: [
-        v => !!v || 'Password is required'
+        v => !!v || 'Has not content and must be more than 5 letters.',
+        v => /\S{5,}/.test(v) || 'Has not content and must be more than 5 letters.'
       ],
       alert: false,
       page: {
@@ -222,39 +223,44 @@ export default {
     toogleImportant (todo) {
       todo.is_important = !todo.is_important
       this.$http.put('todos/' + todo.id.toString() + '/', JSON.stringify(todo)).then(response => {
-        this.$toast.success('This todo has been marked as ' + (todo.is_important ? 'important' : 'unimportant') + '.')
+        this.$toasted.success('This todo has been marked as ' + (todo.is_important ? 'important' : 'unimportant') + '.')
       }, response => {
-        this.$toast.error('Update failed, please retry later.')
+        this.$toasted.error('Update failed, please retry later.')
       })
     },
     doneTodo (todo) {
       if (!todo.is_done) {
         todo.is_done = true
         this.$http.put('todos/' + todo.id.toString() + '/', JSON.stringify(todo)).then(response => {
-          this.$toast.success('The todo has updated, the list will be updated later.')
+          this.$toasted.success('The todo has updated, the list will be updated later.')
         }, response => {
-          this.$toast.error('Update failed, please retry later.')
+          this.$toasted.error('Update failed, please retry later.')
         })
       } else {
-        this.$toast.success('The todo has updated, the list will be updated later.')
+        this.$toasted.success('The todo has updated, the list will be updated later.')
       }
     },
     saveForm (todo) {
       if (!this.$refs.form.validate()) {
         this.clearForm()
-        return false
+      } else {
+        this.$http.post('todos/', JSON.stringify(this.todoForm)).then(response => {
+          this.todoList.unshift(response.body)
+          this.clearForm()
+          this.$toasted.success('The todo has updated, the list will be updated later.')
+        }, response => {
+          this.$toasted.error('Added failed, please retry later.')
+        })
       }
-      this.$http.post('todos/', JSON.stringify(this.todoForm)).then(response => {
-        this.todoList.unshift(response.body)
-        this.clearForm()
-        this.$toast.success('The todo has updated, the list will be updated later.')
-      }, response => {
-        this.$toast.error('Added failed, please retry later.')
-      })
     },
     clearForm () {
       this.$refs.form.reset()
-      this.todoForm.is_important = false
+      this.todoForm = {
+        valid: true,
+        name: '',
+        is_done: false,
+        is_important: false
+      }
     },
     confirmDelete (todoId) {
       this.alert = true
@@ -266,12 +272,15 @@ export default {
         this.$http.delete('todos/' + id + '/').then(response => {
           this.pendingDelete = this.pendingDelete.filter(todo => todo.id !== id)
           this.todoList = this.todoList.filter(todo => todo.id !== id)
-          this.$toast.success('This todo has been deleted.')
+          this.$toasted.success('This todo has been deleted.')
         }, response => {
-          this.$toast.error('Delete failed, please try again.')
+          this.$toasted.error('Delete failed, please try again.')
         })
       })
       this.pendingDelete = []
+      if (this.todoList.length <= 0) {
+        this.getTodoList()
+      }
     },
     getTodoList () {
       this.$http.get('todos/' + '?page=' + this.page.current).then(response => {
@@ -279,24 +288,9 @@ export default {
         this.page = response.body.page
       }, response => {
         if (response.status === 0) {
-          this.$toast.error('Connection timeout, please retry.')
+          this.$toasted.error('Connection timeout, please retry.')
         }
       })
-    },
-    updateTabAndPageBar () {
-      switch (this.active) {
-        case 0:
-          this.pageBar = true
-          break
-        case 1:
-          this.pageBar = true
-          break
-        case 2:
-          this.pageBar = false
-          break
-        default:
-          this.pageBar = false
-      }
     }
   }
 }

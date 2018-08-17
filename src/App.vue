@@ -1,13 +1,13 @@
 <template>
   <div>
+    <vue-progress-bar></vue-progress-bar>
     <template v-if="$store.state.signIn">
       <v-app id="inspire">
         <v-navigation-drawer
           :clipped="$vuetify.breakpoint.lgAndUp"
           v-model="drawer"
           fixed
-          app
-        >
+          app>
           <v-toolbar flat class="transparent">
             <v-list class="pa-0">
               <v-list-tile avatar>
@@ -15,15 +15,15 @@
                   <v-icon class="blue lighten-1 white--text">person</v-icon>
                 </v-list-tile-avatar>
                 <v-list-tile-content>
-                  <v-list-tile-title>Welcome, Admin.</v-list-tile-title>
+                  <v-list-tile-title>{{whoAmI}}'s console.</v-list-tile-title>
                 </v-list-tile-content>
               </v-list-tile>
             </v-list>
           </v-toolbar>
           <v-list dense two-line>
-            <v-list-tile ripple :active-class="selected" :to="{ name: 'todos' }" @click="clickedList">
+            <v-list-tile ripple :active-class="selected" :to="{ name: 'todos' }">
               <v-list-tile-action>
-                <v-icon>receipt</v-icon>
+                <v-icon>poll</v-icon>
               </v-list-tile-action>
               <v-list-tile-content>
                 <v-list-tile-title>TODOS</v-list-tile-title>
@@ -64,8 +64,7 @@
           color="blue darken-3"
           dark
           app
-          fixed
-        >
+          fixed>
           <v-toolbar-title style="width: 300px" class="ml-0 pl-3">
             <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
             <span class="hidden-sm-and-down">PyDeer</span>
@@ -96,7 +95,16 @@
         </v-toolbar>
         <v-content>
           <v-container fluid fill-height>
-            <v-layout justify-center align-center>
+            <v-layout fill-height justify-center align-center>
+              <!-- <v-breadcrumbs divider="/">
+                <v-breadcrumbs-item
+                  v-for="link in navigationLinks"
+                  :key="link.text"
+                  :disabled="link.disabled"
+                >
+                  {{ link.text }}
+                </v-breadcrumbs-item>
+              </v-breadcrumbs> -->
               <router-view></router-view>
             </v-layout>
           </v-container>
@@ -115,74 +123,26 @@
       </v-app>
     </template>
   </div>
-  <!-- <div>
-    <template v-if="$store.state.signIn">
-      <mu-appbar style="width: 100%;position: fixed;z-index: 2;" color="primary">
-        TODOS
-        <mu-button flat slot="right" :to="{name: 'todos'}">Home</mu-button>
-        <mu-button flat slot="right" :to="{name: 'channels'}">Channels</mu-button>
-        <mu-button flat slot="right" href="http://localhost:5000/" target="_blank">Go Site</mu-button>
-        <mu-menu slot="right" open-on-hover>
-          <mu-button flat>Welcome, {{ user.username }}.</mu-button>
-        </mu-menu>
-        <mu-menu style="margin-top: 15px" slot="right" open-on-hover placement="bottom-end">
-          <mu-row justify-content="center">
-            <mu-avatar :size="48" color="primary">
-              <img :src="user.picture" v-if="user.picture !== ''">
-              <mu-icon value="account_circle" v-else></mu-icon>
-            </mu-avatar>
-          </mu-row>
-          <mu-list slot="content">
-            <mu-list-item button @click="profile()">
-              <mu-icon value="description"></mu-icon>
-              <mu-list-item-title>Profile</mu-list-item-title>
-            </mu-list-item>
-            <mu-list-item button>
-              <mu-icon value="settings"></mu-icon>
-              <mu-list-item-title>Settings</mu-list-item-title>
-            </mu-list-item>
-            <mu-list-item button @click="logOut()">
-              <mu-icon value="exit_to_app"></mu-icon>
-              <mu-list-item-title>Sign out</mu-list-item-title>
-            </mu-list-item>
-          </mu-list>
-        </mu-menu>
-      </mu-appbar>
-      <mu-container>
-        <mu-row>
-          <mu-col span="12" md="2" sm="12"></mu-col>
-
-          <mu-col span="12" md="8" sm="12">
-            <router-view/>
-          </mu-col>
-
-          <mu-col span="12" md="2" sm="12"></mu-col>
-        </mu-row>
-      </mu-container>
-    </template>
-    <template v-else>
-      <router-view></router-view>
-    </template>
-  </div> -->
 </template>
 
 <script>
 export default {
   data: () => ({
     drawer: null,
+    user: {
+      username: 'Administrator'
+    },
     selected: 'primary--text'
   }),
-  watch: {
-    'store.state.signIn' () {
-      console.log('Is changed.')
+  computed: {
+    whoAmI () {
+      return this.$store.state.user.username
     }
   },
   methods: {
     logOut () {
       this.$store.commit('logOut')
       this.$router.push({ name: 'login' })
-    },
-    clickedList (e) {
     }
   }
 }

@@ -5,6 +5,7 @@ import Login from '@/components/Login'
 import Profile from '@/components/Profile'
 import Channels from '@/components/Channels'
 import Posts from '@/components/Posts'
+import MarkdownEditor from '@/components/Markdown'
 
 Vue.use(Router)
 
@@ -38,6 +39,11 @@ export default new Router({
       path: '/login',
       name: 'login',
       component: Login
+    },
+    {
+      path: '/editor',
+      name: 'editor',
+      component: MarkdownEditor
     },
     {
       path: '/profile',

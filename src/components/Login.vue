@@ -60,12 +60,15 @@ export default {
       if (this.$refs.form.validate()) {
         this.$http.post('login/', JSON.stringify(this.loginForm)).then(response => {
           var token = response.body.token
-          this.$toast.success('Congratulations, You are login successful.')
           this.$store.commit('isLogin', token)
+          this.$http.get('login/me/').then(response => {
+            this.$store.commit('setUserInfo', response.body)
+          })
           this.$router.push({ name: 'todos' })
+          this.$toasted.show('Congratulations, You are login successful.')
         }, response => {
           var errorMessage = response.body ? response.body.message : 'Oops! got a little problem, try again.'
-          this.$toast.error(errorMessage)
+          this.$toasted.show(errorMessage)
         }).catch(error => {
           console.log(error)
         })

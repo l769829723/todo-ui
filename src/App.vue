@@ -37,6 +37,14 @@
                 <v-list-tile-title>POSTS</v-list-tile-title>
               </v-list-tile-content>
             </v-list-tile>
+            <v-list-tile ripple :to="{ name: 'channels' }">
+              <v-list-tile-action>
+                <v-icon>view_day</v-icon>
+              </v-list-tile-action>
+              <v-list-tile-content>
+                <v-list-tile-title>CHANNELS</v-list-tile-title>
+              </v-list-tile-content>
+            </v-list-tile>
             <v-divider></v-divider>
             <v-subheader>System</v-subheader>
             <v-list-tile ripple>

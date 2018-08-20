@@ -9,33 +9,41 @@
       Posts
     </v-tab>
     <v-tab-item lazy>
-      <v-card>
-        <v-card-text>
-          <template v-if="postsList.length >= 1">
-            <v-data-table
-              :headers="headers"
-              :items="postsList"
-              hide-actions
-              :loading="loading"
-            >
-            <template slot="items" slot-scope="props">
-              <td>{{ props.index + 1}}</td>
-              <td>{{ props.item.name }}</td>
-              <td>
-                <timeago :since="props.item.publishTime"></timeago>
-              </td>
-              <td>
-                <timeago :since="props.item.updateTime"></timeago>
-              </td>
-              <td>{{ props.item.channel }}</td>
-            </template>
-            </v-data-table>
+      <template v-if="postsList.length >= 1">
+        <v-data-table
+          :headers="headers"
+          :items="postsList"
+          hide-actions
+          class="elevation-1"
+        >
+          <template slot="items" slot-scope="props">
+            <td>
+              <v-tooltip bottom>
+                <router-link slot="activator" :to="{ name: 'postDetail', params: { id: props.item.id} }">
+                  {{ props.index + 1 }}
+                </router-link>
+                <span>View post detail</span>
+              </v-tooltip>
+            </td>
+            <td>{{ props.item.name }}</td>
+            <td>{{ props.item.channel }}</td>
+            <td>
+              <timeago :since="props.item.updateTime"></timeago>
+            </td>
+            <td>
+              <timeago :since="props.item.publishTime"></timeago>
+            </td>
           </template>
-          <template v-else>
-            No more data showing.
+          <template slot="no-data">
+            <div>
+              <p class="text-md-center">No data available.</p>
+            </div>
           </template>
-        </v-card-text>
-      </v-card>
+        </v-data-table>
+      </template>
+      <template v-else>
+        No more data showing.
+      </template>
     </v-tab-item>
 
     <v-tab>
@@ -123,9 +131,9 @@ export default {
           value: 'id'
         },
         { text: 'Title', value: 'name', align: 'left' },
+        { text: 'Channel', value: 'channel', align: 'left' },
         { text: 'PublishTime', value: 'publishTime', align: 'left' },
-        { text: 'UpdateTime', value: 'updateTime', align: 'left' },
-        { text: 'Channel', value: 'channel', align: 'left' }
+        { text: 'UpdateTime', value: 'updateTime', align: 'left' }
       ],
       editor: {
         configs: {
@@ -172,7 +180,11 @@ export default {
     },
     getChannels () {
       this.$http.get('channels/').then(response => {
-        this.channels = response.body
+        this.channels = []
+        response.body.forEach(channel => {
+          console.log(channel.name)
+          this.channels.push(channel.name)
+        })
       }, faild => {
         this.$toasted.error('Connection error, please refresh.')
       })
@@ -197,6 +209,12 @@ export default {
           this.$toasted.error('Connection error, please retry.')
         })
       }
+    },
+    deletePost (postId) {
+      console.log(postId)
+    },
+    editPost (postId) {
+      console.log(postId)
     }
   }
 }

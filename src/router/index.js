@@ -6,6 +6,7 @@ import Profile from '@/components/Profile'
 import Channels from '@/components/Channels'
 import Posts from '@/components/Posts'
 import MarkdownEditor from '@/components/Markdown'
+import PostDetail from '@/components/PostDetail'
 
 Vue.use(Router)
 
@@ -31,6 +32,14 @@ export default new Router({
       path: '/posts',
       name: 'posts',
       component: Posts,
+      meta: {
+        protected: true
+      }
+    },
+    {
+      path: '/posts/:id',
+      name: 'postDetail',
+      component: PostDetail,
       meta: {
         protected: true
       }

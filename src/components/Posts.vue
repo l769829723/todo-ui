@@ -28,10 +28,10 @@
             <td>{{ props.item.name }}</td>
             <td>{{ props.item.channel }}</td>
             <td>
-              <timeago :since="props.item.updateTime"></timeago>
+              <timeago :since="props.item.update_time"></timeago>
             </td>
             <td>
-              <timeago :since="props.item.publishTime"></timeago>
+              <timeago :since="props.item.publish_time"></timeago>
             </td>
           </template>
           <template slot="no-data">
@@ -182,7 +182,6 @@ export default {
       this.$http.get('channels/').then(response => {
         this.channels = []
         response.body.forEach(channel => {
-          console.log(channel.name)
           this.channels.push(channel.name)
         })
       }, faild => {

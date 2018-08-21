@@ -19,7 +19,7 @@
           <h3 class="headline mb-0">{{ renderedTitle }}</h3>
           <div>
             Publish at:
-            <timeago :since="this.post.publishTime"></timeago>
+            <timeago :since="this.post.publish_time"></timeago>
           </div>
         </div>
       </v-card-title>

@@ -60,6 +60,27 @@
               label="Title"
               required
             ></v-text-field>
+            <v-combobox
+              v-model="postForm.tags"
+              :items="tags"
+              :search-input.sync="search"
+              hide-selected
+              hint="Maximum of 5 tags"
+              label="Add some tags"
+              multiple
+              persistent-hint
+              small-chips
+            >
+              <template slot="no-data">
+                <v-list-tile>
+                  <v-list-tile-content>
+                    <v-list-tile-title>
+                      No results matching "<strong>{{ search }}</strong>". Press <kbd>enter</kbd> to create a new one
+                    </v-list-tile-title>
+                  </v-list-tile-content>
+                </v-list-tile>
+              </template>
+            </v-combobox>
             <v-select
               v-model="postForm.channel"
               :items="channels"
@@ -106,16 +127,19 @@ window.hljs = hljs
 export default {
   data () {
     return {
+      search: null,
       active: 0,
       loading: true,
       postsList: [],
       channels: [],
+      tags: [],
       postForm: {
         valid: true,
         name: '',
         channel: '',
         content: '',
-        isPublished: ''
+        isPublished: '',
+        tags: []
       },
       postNameRules: [
         v => !!v || 'Required a title',
@@ -165,9 +189,17 @@ export default {
   created () {
     this.getPosts()
     this.getChannels()
+    this.getTags()
   },
   components: {
     markdownEditor
+  },
+  watch: {
+    'postForm.tags' (val) {
+      if (val.length && val.length > 5) {
+        this.$nextTick(() => this.postForm.tags.pop())
+      }
+    }
   },
   methods: {
     getPosts () {
@@ -186,6 +218,11 @@ export default {
         })
       }, faild => {
         this.$toasted.error('Connection error, please refresh.')
+      })
+    },
+    getTags () {
+      this.$http.get('tags/').then(response => {
+        this.tags = response.body
       })
     },
     clear () {

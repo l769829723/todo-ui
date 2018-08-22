@@ -65,8 +65,8 @@
               :items="tags"
               :search-input.sync="search"
               hide-selected
-              hint="Maximum of 5 tags"
-              label="Add some tags"
+              hint="Maximum of 3 tags"
+              label="Add some wanted to marked tags"
               multiple
               persistent-hint
               small-chips
@@ -196,7 +196,7 @@ export default {
   },
   watch: {
     'postForm.tags' (val) {
-      if (val.length && val.length > 5) {
+      if (val.length && val.length > 3) {
         this.$nextTick(() => this.postForm.tags.pop())
       }
     }
@@ -232,13 +232,20 @@ export default {
         name: '',
         channel: '',
         content: '',
-        isPublished: ''
+        isPublished: '',
+        tags: []
       }
     },
     save () {
       if (this.$refs.form.validate()) {
         this.$http.post('posts/', JSON.stringify(this.postForm)).then(response => {
           this.postsList.unshift(response.body)
+          this.postForm.tags.forEach(tag => {
+            this.tags.forEach(etag => {
+              if (tag === etag) return
+              this.tags.unshift(tag)
+            })
+          })
           this.clear()
           this.$toasted.success('Success, post ' + response.body.name + ' has been saved.')
         }, faild => {

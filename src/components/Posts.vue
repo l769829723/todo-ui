@@ -27,6 +27,7 @@
             </td>
             <td>{{ props.item.name }}</td>
             <td>{{ props.item.channel }}</td>
+            <td>{{ props.item.is_published ? 'YES' : 'NO' }}</td>
             <td>
               <timeago :since="props.item.update_time"></timeago>
             </td>
@@ -138,7 +139,7 @@ export default {
         name: '',
         channel: '',
         content: '',
-        isPublished: '',
+        is_published: '',
         tags: []
       },
       postNameRules: [
@@ -156,8 +157,9 @@ export default {
         },
         { text: 'Title', value: 'name', align: 'left' },
         { text: 'Channel', value: 'channel', align: 'left' },
-        { text: 'PublishTime', value: 'publishTime', align: 'left' },
-        { text: 'UpdateTime', value: 'updateTime', align: 'left' }
+        { text: 'Is Published', value: 'isPublished', align: 'left' },
+        { text: 'Publish Time', value: 'publishTime', align: 'left' },
+        { text: 'Update Time', value: 'updateTime', align: 'left' }
       ],
       editor: {
         configs: {
@@ -232,7 +234,7 @@ export default {
         name: '',
         channel: '',
         content: '',
-        isPublished: '',
+        is_published: '',
         tags: []
       }
     },

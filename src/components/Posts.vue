@@ -19,15 +19,25 @@
           <template slot="items" slot-scope="props">
             <td>
               <v-tooltip bottom>
-                <router-link slot="activator" :to="{ name: 'postDetail', params: { id: props.item.id} }">
-                  {{ props.index + 1 }}
-                </router-link>
+                <v-chip label slot="activator">
+                  <router-link :to="{ name: 'postDetail', params: { id: props.item.id} }">
+                    {{ props.index + 1 }}
+                  </router-link>
+                </v-chip>
                 <span>View post detail</span>
               </v-tooltip>
             </td>
             <td>{{ props.item.name }}</td>
             <td>{{ props.item.channel }}</td>
-            <td>{{ props.item.is_published ? 'YES' : 'NO' }}</td>
+            <td>
+              <v-switch
+                @change="togglePublished(props.item.id)"
+                color="success"
+                :label="props.item.is_published ? 'Yes' : 'No'"
+                v-model="props.item.is_published"
+              ></v-switch>
+              <!-- {{ props.item.is_published ? 'YES' : 'NO' }} -->
+            </td>
             <td>
               <timeago :since="props.item.update_time"></timeago>
             </td>
@@ -254,6 +264,11 @@ export default {
           this.$toasted.error('Connection error, please retry.')
         })
       }
+    },
+    togglePublished (postId) {
+      this.$http.patch('posts/' + postId.toString() + '/').then(response => {
+        this.$toasted.success('Success, post already published.')
+      })
     },
     deletePost (postId) {
       console.log(postId)

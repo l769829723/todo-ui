@@ -267,14 +267,8 @@ export default {
     },
     togglePublished (postId) {
       this.$http.patch('posts/' + postId.toString() + '/').then(response => {
-        this.$toasted.success('Success, post already published.')
+        this.$toasted.success('Success, post already updated.')
       })
-    },
-    deletePost (postId) {
-      console.log(postId)
-    },
-    editPost (postId) {
-      console.log(postId)
     }
   }
 }
